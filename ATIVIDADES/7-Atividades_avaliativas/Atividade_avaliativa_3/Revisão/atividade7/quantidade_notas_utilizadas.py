@@ -12,7 +12,7 @@
 
 # Abrindo o arquivo em modo de escrita ("w" sobrescreve o conteúdo se já existir)
 
-diretorio = "ATIVIDADES/7-Atividades_avaliativas/Atividade_avaliativa_3/Revisão/notas.txt"
+diretorio = "ATIVIDADES/7-Atividades_avaliativas/Atividade_avaliativa_3/Revisão/atividade7/notas.txt"
 
 with open (diretorio, "w", encoding="utf-8") as arquivo:
     arquivo.write("Esta é a primeira linha do arquivo.\n")
