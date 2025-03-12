@@ -11,11 +11,10 @@
 #saida = [cem, cinquenta, vinte, dez, cinco, dois, um]
 
 # Abrindo o arquivo em modo de escrita ("w" sobrescreve o conteúdo se já existir)
-diretorio = "atividade7/notas.txt"
-diretorio2 = "revisao_atividade_avaliativa/atividade7/notas.txt.py"
-diretorio3 = "Documents/programacao_1/revisao_atividade_avaliativa"
 
-with open (diretorio3, "w", encoding="utf-8") as arquivo:
+diretorio = "ATIVIDADES/7-Atividades_avaliativas/Atividade_avaliativa_3/Revisão/notas.txt"
+
+with open (diretorio, "w", encoding="utf-8") as arquivo:
     arquivo.write("Esta é a primeira linha do arquivo.\n")
     arquivo.write("Segunda linha de notas.\n")
     arquivo.write("Terceira linha adicionada ao arquivo.\n")

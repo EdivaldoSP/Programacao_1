@@ -1,0 +1,3 @@
+Esta é a primeira linha do arquivo.
+Segunda linha de notas.
+Terceira linha adicionada ao arquivo.
