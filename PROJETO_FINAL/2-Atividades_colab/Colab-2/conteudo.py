@@ -84,6 +84,26 @@ frequencia = FreqDist(lista2)
 #print(frequencia.most_common())
 
 # |=============================================[ x ]=================================================|
+                              # ENCONTRAR CLASSE GRAMATICAÇ COM SPACY
+
+# texto = "Python é uma linguagem popular para ciência de dados."
+# doc = nlp(texto)  # Processa o texto
+
+# print(doc) # é uma lista com varios tokens
+
+# for token in doc:
+#   print(token.text, token.pos_)  # Exibe a palavra e sua classe gramatical
+
+# palavras_relevantes1 = []
+
+# for token in doc:
+#   if token.pos_ in ["NOUN", "VERB"]:
+#     palavras_relevantes1.append(token.text)
+
+# print(palavras_relevantes1)
+# print(palavras_relevantes2)
+
+# |=============================================[ x ]=================================================|
                                 # CONSENO: UMA MEDIDA DE SIMILARIDADE
 
 # A similaridade por cosseno é uma medida da similaridade de entre dois vetores num espaço vetorial que 

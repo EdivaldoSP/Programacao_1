@@ -17,16 +17,21 @@ from collections import Counter
 
 # FAZENDO A LEITURA DO ARQUIVO .TXT
 
-with open ("Colab-2/texto2.txt", "r", encoding="UTF-8") as arquivo:
-  texto1 = arquivo.read()
+# with open ("Colab-2/texto2.txt", "r", encoding="UTF-8") as arquivo:
+#   texto1 = arquivo.read()
   #print(texto1)
 
-with open ("Colab-2/mariele.txt", "r", encoding="UTF-8") as arquivo:
-  mariele_texto = arquivo.read()
+# with open ("Colab-2/mariele.txt", "r", encoding="UTF-8") as arquivo:
+#   mariele_texto = arquivo.read()
   #print(texto2)
 
-with open ("Colab-2/texto_auxiliar.txt")as arquivo:
+# abrir arquivo localmente 
+with open ("2-Atividades_colab/Colab-2/texto_auxiliar.txt", "r", encoding="UTF-8") as arquivo:
    programacao = arquivo.read()
+
+# abrir arquivo codespace
+# with open ("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/texto_auxiliar.txt") as arquivo:
+#    programacao = arquivo.read()
   #print(programacao)
 
 # FUNÇÃO QUE FAZ O PRE-PROCESSAMENTO DO ARQUIVO .TXT
@@ -63,21 +68,10 @@ def pre_processamento(texto):
 
 # resultado1 = pre_processamento(texto1)
 
-resultado2 = pre_processamento(mariele_texto)
+# resultado2 = pre_processamento(mariele_texto)
 
 
 #print(resultado2)
-
-# |=============================================[ x ]=================================================|
-                                # DESCOBRINDO A FREQUÊNCIA DE CADA TOKEN
-
-lista2 = []
-for sentenca in resultado2:
-    for token in sentenca:
-        lista2.append(token)
-
-frequencia = FreqDist(lista2)
-#print(frequencia.most_common())
 
 # |=============================================[ x ]=================================================|
                         # FUNÇÃO QUE CALCULA O PRODUTO E A SOMA DO DENOMINADOR
@@ -141,6 +135,8 @@ def media_sentencas(lista_das_similaridades):
   return media_similaridades
 
 # |=============================================[ x ]=================================================|
+                # FUNÇÃO QUE DIVIDE AS SENTENÇAS DO TEXTO E TRANSFORMA EM DICIONARIO 
+
 # def dicionario(texto):
 #   lista_dicionarios = []
   
@@ -156,6 +152,8 @@ def media_sentencas(lista_das_similaridades):
 #   return lista_dicionarios
 
 # |=============================================[ x ]=================================================|
+                  # FUNÇÃO QUE VAI CRIAR OS SUBTÓPICOS (SEGMENTAR O TEXTO EM SUBTÓPICOS)
+
 def criar_subtopicos(texto, lista_similaridades, media_similaridade):
   sentencas = nltk.tokenize.sent_tokenize(texto)
 
@@ -175,6 +173,8 @@ def criar_subtopicos(texto, lista_similaridades, media_similaridade):
   return sub_topico
 
 # |=============================================[ x ]=================================================|
+                      # FUNÇÃO QUE VAI CRIAR OS RÓTULOS DE CADA SUBTÓPICOS
+
 def criar_rotulos(lista_de_subtopicos):
   rotulos = []  # Lista para armazenar os rótulos
 
@@ -186,7 +186,7 @@ def criar_rotulos(lista_de_subtopicos):
       doc = nlp(sentenca)  # Processa a sentença com spaCy
       for token in doc:
         # Verifica se a palavra é um substantivo (NOUN) ou verbo (VERB)
-        if token.pos_ in ["NOUN", "VERB"]:
+        if token.pos_ in ["VERB", "ADJ", "PROPN", "NOUN"]:
           palavras_validas.append(token.text.lower())  # Adiciona em minúsculas
 
     # Conta a frequência das palavras
@@ -198,6 +198,8 @@ def criar_rotulos(lista_de_subtopicos):
     rotulos.append(rotulo)  # Adiciona o rótulo à lista de rótulos
 
   return rotulos  # Retorna a lista com os rótulos de cada subtópico
+
+  #---------------------------------------------------------------------------------------------------# 
 
   # palavras_validas = []
 
@@ -219,6 +221,8 @@ def criar_rotulos(lista_de_subtopicos):
   # rotulo = [palavra for palavra, _ in contagem.most_common(5)]
 
   # return rotulo  # Retorna a lista com o rótulo do subtópico
+
+  #---------------------------------------------------------------------------------------------------#
 
 # def criar_rotulos(sub_topicos):
 #   rotulos_subtopicos = []
@@ -248,23 +252,6 @@ def criar_rotulos(lista_de_subtopicos):
 
 #   return rotulos_subtopicos
 
-  # |============================================[ x ]================================================|
-
-  # for sentenca in resultado2:
-  #     for token in sentenca:
-  #       if ...
-  #         palavras_revelantes.append(token)
-
-  # doc = nlp(sub_topicos)
-
-  # frequencia = FreqDist(doc)
-  # result = frequencia.most_common()
-
-  
-
-#print(frequencia.most_common())
-
-
 # |=============================================[ x ]=================================================|
 
 # resultado_similaridade1 = similaridade(resultado3)
@@ -274,24 +261,6 @@ def criar_rotulos(lista_de_subtopicos):
 # teste = juntar_sentencas(programacao, resultado_similaridade1, media)
 
 # teste2 = dicionario(programacao)
-# |=============================================[ x ]=================================================|
-
-# texto = "Python é uma linguagem popular para ciência de dados."
-# doc = nlp(texto)  # Processa o texto
-
-# print(doc) # é uma lista com varios tokens
-
-# for token in doc:
-#   print(token.text, token.pos_)  # Exibe a palavra e sua classe gramatical
-
-# palavras_relevantes1 = []
-
-# for token in doc:
-#   if token.pos_ in ["NOUN", "VERB"]:
-#     palavras_relevantes1.append(token.text)
-
-# print(palavras_relevantes1)
-# print(palavras_relevantes2)
 
 # |=============================================[ x ]=================================================|
 
@@ -309,7 +278,6 @@ print(resultado3)
 print(len(resultado3))
 # print(len(teste2))
 
-
 print("-" * 170)
 print("LISTA DAS SIMILARIDADES: ")
 print(lista_similaridade)
@@ -325,41 +293,7 @@ print(subtopicos)
 
 print("-" * 170)
 print("ROTULOS EM CADA SUBTOPICOS: ")
-#
 
 # Exibir os rótulos de cada subtópico
 for i, rotulo in enumerate(rotulos_gerados):
     print(f"Subtópico {i+1}: {rotulo}")
-
-# for i in subtopicos:
-#   print(i)
-
-
-
-# print("-" * 170)
-# print("RESULTADO DO PROCESSAMENTO DO TEXTO:")
-# print(resultado3)
-# print()
-
-# print("QUANTIDADE DE SENTENÇAS")
-# print(len(resultado3)) # 19
-# print("-" * 170)
-
-# print("RESULTADO DO CALCULO DE SIMILARIDADE:")
-# print(resultado_similaridade1) # [0.33806170189140655, 0.5714285714285714, 0.3086066999241838, 0.18257418583505536, 0.5477225575051661, 0.4629100498862757, 0.33806170189140655, 0.19999999999999996, 0.5999999999999999, 0.2581988897471611, 0.0, 0.47140452079103173, 0.0, 0.5070925528371099, 0.16903085094570328, 0.0, 0.4472135954999579, 0.19999999999999996]
-# print()
-
-# print("QUANTIDADE DE SIMILARIDADES")
-# print(len(resultado_similaridade1)) # 18
-# print(f"media similiridade {media}") # 0.3112392154546127
-# print("-" * 170)
-
-# print("SENTENÇAS:")
-# print(frases)
-# print("-" * 170)
-
-
-
-# print("-" * 170)
-
-# obs: tenho uma lista com as similaridades das sentencas, o que tenho que fazer agora?
