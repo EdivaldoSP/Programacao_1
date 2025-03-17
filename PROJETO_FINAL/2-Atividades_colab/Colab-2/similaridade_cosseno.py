@@ -297,3 +297,5 @@ print("ROTULOS EM CADA SUBTOPICOS: ")
 # Exibir os rótulos de cada subtópico
 for i, rotulo in enumerate(rotulos_gerados):
     print(f"Subtópico {i+1}: {rotulo}")
+    
+print("-" * 170)
