@@ -14,8 +14,8 @@ from collections import Counter
 # nltk.download('rslp') # Módulo para radicalizar
 # nltk.download('averaged_perceptron_tagger_eng')
 
-
-# FAZENDO A LEITURA DO ARQUIVO .TXT
+# |================================================================[ x ]====================================================================|
+                                                  # FAZENDO A LEITURA DO ARQUIVO .TXT
 
 # with open ("Colab-2/texto2.txt", "r", encoding="UTF-8") as arquivo:
 #   texto1 = arquivo.read()
@@ -34,7 +34,8 @@ with open ("2-Atividades_colab/Colab-2/texto_auxiliar.txt", "r", encoding="UTF-8
 #    programacao = arquivo.read()
   #print(programacao)
 
-# FUNÇÃO QUE FAZ O PRE-PROCESSAMENTO DO ARQUIVO .TXT
+# |================================================================[ x ]====================================================================|  
+                                            # FUNÇÃO QUE FAZ O PRE-PROCESSAMENTO DO ARQUIVO .TXT
 
 def pre_processamento(texto):
     sentencas = nltk.tokenize.sent_tokenize(texto)
@@ -70,11 +71,10 @@ def pre_processamento(texto):
 
 # resultado2 = pre_processamento(mariele_texto)
 
-
 #print(resultado2)
 
-# |=============================================[ x ]=================================================|
-                        # FUNÇÃO QUE CALCULA O PRODUTO E A SOMA DO DENOMINADOR
+# |================================================================[ x ]====================================================================|
+                                            # FUNÇÃO QUE CALCULA O PRODUTO E A SOMA DO DENOMINADOR
 
 def produto_e_soma(vetor):
   total = 0
@@ -83,8 +83,7 @@ def produto_e_soma(vetor):
     total += vetor[i] ** 2
   return total
 
-#------------------------------->                 <>                 <-------------------------------|
-                        # FUNÇÃO QUE CALCULA A SIMILARIDADE ENTRE AS SENTENÇAS
+# |================================================================[ x ]====================================================================|                        # FUNÇÃO QUE CALCULA A SIMILARIDADE ENTRE AS SENTENÇAS
 
 def similaridade (sentencas_limpas):
   lista_das_similaridades = []
@@ -100,7 +99,8 @@ def similaridade (sentencas_limpas):
 
     for token in sentencas_limpas[indice + 1]:
       vetor2[tokens_unicos.index(token)] += 1
-  #---------------------------------------------------------------------------------------------------#
+
+  #-----------------------------------------------------------------------------------------------------------------------------------------#
     numerador = 0
 
     for i in range(len(tokens_unicos)):
@@ -112,30 +112,29 @@ def similaridade (sentencas_limpas):
     denominador = sqrt(variavel_a) * sqrt(variavel_b)
                  
     cosseno = numerador / (denominador)
-  #---------------------------------------------------------------------------------------------------#
+  #-----------------------------------------------------------------------------------------------------------------------------------------#
     
     lista_das_similaridades.append(cosseno)
 
   return lista_das_similaridades
 
-# |=============================================[ x ]=================================================|
+# |================================================================[ x ]====================================================================|
 
 def media_sentencas(lista_das_similaridades):
-  # achar a media entre as similaridades
+  # achar a média entre as similaridades
 
   soma_similaridades = 0
   quantidade_similaridades = len(lista_das_similaridades)
 
   for similaridade_entre_sentencas in lista_das_similaridades:
     soma_similaridades += similaridade_entre_sentencas
-    #quantidade_de_similaridades += 1
 
   media_similaridades = soma_similaridades / quantidade_similaridades
 
   return media_similaridades
 
-# |=============================================[ x ]=================================================|
-                # FUNÇÃO QUE DIVIDE AS SENTENÇAS DO TEXTO E TRANSFORMA EM DICIONARIO 
+# |================================================================[ x ]====================================================================|
+                                    # FUNÇÃO QUE DIVIDE AS SENTENÇAS DO TEXTO E TRANSFORMA EM DICIONARIO 
 
 # def dicionario(texto):
 #   lista_dicionarios = []
@@ -151,8 +150,8 @@ def media_sentencas(lista_das_similaridades):
 
 #   return lista_dicionarios
 
-# |=============================================[ x ]=================================================|
-                  # FUNÇÃO QUE VAI CRIAR OS SUBTÓPICOS (SEGMENTAR O TEXTO EM SUBTÓPICOS)
+# |================================================================[ x ]====================================================================|
+                                  # FUNÇÃO QUE VAI CRIAR OS SUBTÓPICOS (SEGMENTAR O TEXTO EM SUBTÓPICOS)
 
 def criar_subtopicos(texto, lista_similaridades, media_similaridade):
   sentencas = nltk.tokenize.sent_tokenize(texto)
@@ -172,8 +171,8 @@ def criar_subtopicos(texto, lista_similaridades, media_similaridade):
 
   return sub_topico
 
-# |=============================================[ x ]=================================================|
-                      # FUNÇÃO QUE VAI CRIAR OS RÓTULOS DE CADA SUBTÓPICOS
+# |================================================================[ x ]====================================================================|
+                                          # FUNÇÃO QUE VAI CRIAR OS RÓTULOS DE CADA SUBTÓPICOS
 
 def criar_rotulos(lista_de_subtopicos):
   rotulos = []  # Lista para armazenar os rótulos
@@ -199,7 +198,7 @@ def criar_rotulos(lista_de_subtopicos):
 
   return rotulos  # Retorna a lista com os rótulos de cada subtópico
 
-  #---------------------------------------------------------------------------------------------------# 
+  #-------------------------------------------------------------------------------------------------------------------------------------------# 
 
   # palavras_validas = []
 
@@ -214,15 +213,14 @@ def criar_rotulos(lista_de_subtopicos):
   #       if token.pos_ in ["NOUN", "VERB", "ADJ", "PROPN"]:
   #         palavras_validas.append(token.text.lower())  # Adiciona em minúsculas
 
-  # # Conta a frequência das palavras
-  # contagem = Counter(palavras_validas)
+  # contagem = Counter(palavras_validas) # Conta a frequência das palavras
 
   # # Seleciona as 5 palavras mais comuns
   # rotulo = [palavra for palavra, _ in contagem.most_common(5)]
 
   # return rotulo  # Retorna a lista com o rótulo do subtópico
 
-  #---------------------------------------------------------------------------------------------------#
+  #-------------------------------------------------------------------------------------------------------------------------------------------#
 
 # def criar_rotulos(sub_topicos):
 #   rotulos_subtopicos = []
@@ -252,17 +250,7 @@ def criar_rotulos(lista_de_subtopicos):
 
 #   return rotulos_subtopicos
 
-# |=============================================[ x ]=================================================|
-
-# resultado_similaridade1 = similaridade(resultado3)
-
-# media = media_sentencas(resultado_similaridade1)
-
-# teste = juntar_sentencas(programacao, resultado_similaridade1, media)
-
-# teste2 = dicionario(programacao)
-
-# |=============================================[ x ]=================================================|
+# |================================================================[ x ]====================================================================|
 
 resultado3 = pre_processamento(programacao)
 lista_similaridade = similaridade(resultado3)
@@ -299,3 +287,5 @@ for i, rotulo in enumerate(rotulos_gerados):
     print(f"Subtópico {i+1}: {rotulo}")
     
 print("-" * 170)
+
+# |================================================================[ x ]====================================================================|

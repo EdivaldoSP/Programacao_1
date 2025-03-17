@@ -131,7 +131,7 @@ def formulaCosseno(lista):
       # "lorem" ocupa a posição 2 (supondo) em "uniao", dessa forma, será acrescentado 1 na mesma posição no vetor1 de zeros. 
 
     #------------------------------------------------->                                     <-----------------------------------------------|
-    # PARTE RICCARDO
+    #PARTE RICCARDO
 
     # sent1 = []
     # sent2 = []

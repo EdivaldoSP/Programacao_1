@@ -68,11 +68,6 @@ def formulaCosseno(lista_com_sentencas_separadas):
     frequencia_palavras_sentenca1 = [0] * len(uniao_duas_sentencas)
     frequencia_palavras_sentenca2 = [0] * len(uniao_duas_sentencas)
 
-    # nessa variavel tem uma lista de numeros, cada numero representa se apareceu a palavra referente a mesma posicao comparada
-    # a uniao das duas frases em comparacao, sem palavras repetidas. Para visualizar pode printar ou ver no slide da prof em um 
-    # slide onde ela fala da formula dos cossenos, q ela usa o exemplo a cat and a frog, la tem uma lista de numeros, a ideia 
-    # daquela lista é essa daqui. Essa lista serve so para calcular a similaridade
-
     
     # ADICIONANDO A FREQUENCIA DAS PALAVRAS NOS VETORES
     for token in lista_com_sentencas_separadas[indice]:
@@ -100,6 +95,11 @@ def formulaCosseno(lista_com_sentencas_separadas):
     #     if uniao_duas_sentencas[i] == lista_com_sentencas_separadas[k+1][j]:
     #       cont += 1
     #   frequencia_palavras_sentenca2.append(cont) #aqui tb é aquela lista com aqueles numeros q tem um exemplo no slide
+
+    # nessa variavel tem uma lista de numeros, cada numero representa se apareceu a palavra referente a mesma posicao comparada
+    # a uniao das duas frases em comparacao, sem palavras repetidas. Para visualizar pode printar ou ver no slide da prof em um 
+    # slide onde ela fala da formula dos cossenos, q ela usa o exemplo a cat and a frog, la tem uma lista de numeros, a ideia 
+    # daquela lista é essa daqui. Essa lista serve so para calcular a similaridade
     
     # print('Quantidade de vezes que aparace cada palavra na primeira sentenca, com base a uniao das sentencas: ', aparecimentoPalavrasSentenca1)
     # print('Quantidade de vezes que aparace cada palavra na segunda sentenca, com base a uniao das sentencas: ', aparecimentoPalavrasSentenca2)
