@@ -30,8 +30,8 @@ def pre_processamento(text):
 
     sentencas_normalizadas = []
 
-    for palavra in sentencas:
-        minusculas = palavra.lower()
+    for sentenca in sentencas:
+        minusculas = sentenca.lower()
         sentencas_normalizadas.append(minusculas)
 
     # STOPWORDS
@@ -99,7 +99,7 @@ saida = pre_processamento(texto_exemplo)
 #print(saida) # ⭢ [['dog', 'and', 'cat'], ['frog', 'and', 'cat']]
 
 #------------------------------->                 <>                 <-------------------------------|
-                                # ELIMINANDO TOKENS REPETIDOS DAS SENTENÇAS
+                        # ELIMINANDO TOKENS REPETIDOS DAS SENTENÇAS E UNINDO ELES
 
 tokens_unicos = list(set(saida[0] + saida[1]))
 
@@ -110,7 +110,7 @@ tokens_unicos = list(set(saida[0] + saida[1]))
 # outra estrutura de dados
 # 3º ⭢ agora vamos tranformar de volta para lista com a função list.
 
-#rint(tokens_unicos) # ⭢  ['and', 'cat', 'dog', 'frog']
+#print(tokens_unicos) # ⭢  ['and', 'cat', 'dog', 'frog']
 
 #------------------------------->                 <>                 <-------------------------------|
             # CRIANDO VETORES COM A MESMA QUANTIDADE ZEROS DO TAMANHO DA LISTA "tokens_unicos"
@@ -118,25 +118,25 @@ tokens_unicos = list(set(saida[0] + saida[1]))
 vetor1 = [0] * len(tokens_unicos) # sentença 1
 vetor2 = [0] * len(tokens_unicos) # sentença 2
 
-#print(vetor1) # ⭢  [0, 0, 0, 0]
+#print(vetor1) # ⭢  [1, 1, 1, 0]
 #print(vetor2) # ⭢  [0, 0, 0, 0]
 
 #------------------------------->                 <>                 <-------------------------------|
                             # VERIFICANDO A POSIÇÃO DOS TOKENS DAS SENTENÇAS
 
 # aqui iremos construir os vetores "vetor1" e "vetor2" com novos valores que irão representar a 
-# frequência das palavras (tokens) que estão dentro da lista "teste".
+# frequência das palavras (tokens) que estão dentro da lista "saida".
 
 # O QUE ESTÁ ACONTECENDO COM O CÓDIGO ABAIXO? 
 
 for token in saida[0]:
     vetor1[tokens_unicos.index(token)] += 1 
 
-# 1º ⭢ estamos acessando cada token na lista "saida" percorrendo com o for.
-# 2º ⭢ na primeira repetição, o valor do token é 0, então ele irá acessar a palavra "dog" na lista "saida".
-# 3º ⭢ depois que ele acessar a palavra "dog", ele irá verificar em qual posição a palavra ocupa na 
+# 1. estamos acessando cada token na lista "saida" percorrendo com o for.
+# 2. na primeira repetição, o valor do token é 0, então ele irá acessar a palavra "dog" na lista "saida[0]".
+# 3. depois que ele acessar a palavra "dog", ele irá verificar em qual posição a palavra ocupa na 
 # lista "tokens_unicos"
-# 4º ⭢ "dog" ocupa a posição 2 em "tokens_unicos", dessa forma, será acrescentado 1 na mesma posição 
+# 4. "dog" ocupa a posição 2 em "tokens_unicos", dessa forma, será acrescentado 1 na mesma posição 
 # no vetor1 de zeros.
 
 # O CÓDIGO ABAIXO ESTÁ FAZENDO A MESMA COISA, SÓ QUE COM A OUTRA SENTENÇA DA LISTA "saida"
@@ -177,3 +177,4 @@ b = sqrt(total_2)
 denominador = a * b
 
 # |=============================================[ x ]=================================================|
+
