@@ -88,9 +88,9 @@ def lista_tokenizada(texto):
 #print(resultado2)
 
 # |================================================================[ x ]====================================================================|
-                                            # FUNÇÃO QUE CALCULA O PRODUTO E A SOMA DO DENOMINADOR
+                                            # FUNÇÃO QUE CALCULA O POTENCIA E A SOMA DO DENOMINADOR
 '''
-Essa função servirá como auxiliadora. O objetivo dela é calcular o produto e a soma de um vetor. Essa função será usada para facilitar o 
+Essa função servirá como auxiliadora. O objetivo dela é calcular o potencia e a soma de um vetor. Essa função será usada para facilitar o 
 cálculo do denonimador da fórmula do cosseno (que iremos ver em seguida).
 '''
 
