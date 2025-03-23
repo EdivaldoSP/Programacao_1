@@ -7,7 +7,6 @@ from math import *
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 from nltk.corpus import stopwords
-from collections import Counter
 
 # |================================================================[ x ]====================================================================|
                                                   # ESPAÇO PARA DOWNLOAD DE PACOTES E EXTRAS
@@ -24,24 +23,13 @@ from collections import Counter
 # nltk.download('averaged_perceptron_tagger_eng')
 
 # |================================================================[ x ]====================================================================|
-                                                  # FAZENDO A LEITURA DO ARQUIVO .TXT
+                                                  # FUNÇÃO QUE FAZ A LEITURA DO ARQUIVO 
 
-# with open ("Colab-2/texto2.txt", "r", encoding="UTF-8") as arquivo:
-#   texto1 = arquivo.read()
-  #print(texto1)
+def leitura_arquivo(diretorio):
+  with open (diretorio, 'r', encoding='UTF-8') as arquivo:
+    texto = arquivo.read()
 
-# with open ("Colab-2/mariele.txt", "r", encoding="UTF-8") as arquivo:
-#   mariele_texto = arquivo.read()
-  #print(texto2)
-
-# abrir arquivo localmente:
-with open ("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/texto_auxiliar.txt") as arquivo:
-   programacao = arquivo.read()
-
-# abrir arquivo codespace:
-# with open ("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/texto_auxiliar.txt") as arquivo:
-#    programacao = arquivo.read()
-  #print(programacao)
+  return texto
 
 # |================================================================[ x ]====================================================================|  
                                             # FUNÇÃO QUE FAZ O PRE-PROCESSAMENTO DO ARQUIVO .TXT
@@ -116,10 +104,11 @@ def similaridade (sentencas_limpas):
   lista_das_similaridades = []
   
   # ALGORITMO QUE IRÁ FAZER O CALCULO DO COSSENO
-  for indice in range(len(sentencas_limpas)-1):
+ 
+  for indice in range(len(sentencas_limpas)-1): # 9
 
     # AQUI IRA CONCATENAR DUAS SENTENÇAS PARA POSTERIOR VERIFICAÇÃO DA FREQUENCIA 
-    uniao_sentencas = list(set(sentencas_limpas[indice] + sentencas_limpas[indice + 1]))
+    uniao_sentencas = list(set(sentencas_limpas[indice] + sentencas_limpas[indice+1]))
 
     # CRIAÇÃO DE DOIS VETORES (UM PARA CADA SENTENÇA)
     vetor1 = [0] * len(uniao_sentencas) # sentença 1
@@ -142,19 +131,13 @@ def similaridade (sentencas_limpas):
       vetor2[uniao_sentencas.index(token)] += 1
 
   #-----------------------------------------------------------------------------------------------------------------------------------------#
-    # APLICANDO A FÓRMULA DO COSSENO 
-    numerador = 0
-
-    for i in range(len(uniao_sentencas)):
-      numerador += vetor1[i] * vetor2[i] # --> aqui ele ira multiplicar o numero do vetor1 com outro numero do vetor2 nos mesmos indices e
-                                         #     somar com a variavel "numerador"
-
-    variavel_a = potencia_e_soma(vetor1) # --> calculando potencIa e soma para o denominador
-    variavel_b = potencia_e_soma(vetor2) 
-    denominador = sqrt(variavel_a) * sqrt(variavel_b)
+    
+    # APLICANDO A FÓRMULA DO COSSENO
+    numerador = sum(vetor1[i] * vetor2[i] for i in range(len(uniao_sentencas)))
+    denominador = sqrt(potencia_e_soma(vetor1)) * sqrt(potencia_e_soma(vetor2))
                  
     # CALCULANDO A FORMULA FINAL
-    cosseno = numerador / denominador
+    cosseno = numerador / denominador if denominador != 0 else 0
   #-----------------------------------------------------------------------------------------------------------------------------------------#
 
     # ADICIONANDO O RESULTADO DA SIMILARIDADE A LISTA
@@ -177,7 +160,7 @@ def media_similaridades(lista_das_similaridades):
   for similaridade_entre_sentencas in lista_das_similaridades:
     soma_similaridades += similaridade_entre_sentencas
 
-  media_similaridades = (soma_similaridades / quantidade_similaridades) - 0.15
+  media_similaridades = (soma_similaridades / quantidade_similaridades)
 
   return media_similaridades
 
@@ -188,32 +171,37 @@ Essa função tem o papel de segmentar o texto em subtópicos com base na simila
 '''
 
 def criar_subtopicos(texto, lista_similaridades, media_similaridade):
+    sentencas = nltk.tokenize.sent_tokenize(texto)
+    sub_topicos = []
+    sub_topico_atual = [sentencas[0]]
 
-  # DIVIDINDO O TEXTO EM SENTENÇAS COM NLTK
-  sentencas = nltk.tokenize.sent_tokenize(texto)
+    media = round(media_similaridade * 1.2, 4)  # Ajustar o valor conforme necessário
 
-  # CRIANDO A LISTA COM OS SUBTOPICOS
-  sub_topicos = []
+    for i in range(len(lista_similaridades)):
+        if lista_similaridades[i] > media:
+            sub_topico_atual.append(sentencas[i + 1])
+        else:
+            # Verifica se o subtópico atual tem pelo menos 3 sentenças
+            if len(sub_topico_atual) >= 3:
+                sub_topicos.append(sub_topico_atual)
+            else:
+                # Se não tiver, mescla com o próximo subtópico
+                if sub_topicos:
+                    sub_topicos[-1].extend(sub_topico_atual)
+                else:
+                    sub_topicos.append(sub_topico_atual)
+            sub_topico_atual = [sentencas[i + 1]]
 
-  # GRUPO DE SENTENÇAS SEMELHANTES
-  sub_topico_atual = [sentencas[0]]
+    if sub_topico_atual:
+        if len(sub_topico_atual) >= 3: # --> # Garante que o rótulo tenha pelo menos 3 palavras
+            sub_topicos.append(sub_topico_atual)
+        else:
+            if sub_topicos:
+                sub_topicos[-1].extend(sub_topico_atual)
+            else:
+                sub_topicos.append(sub_topico_atual)
 
-  # ARREDONDANDO A MEDIA
-  media = round(media_similaridade, 4) 
-  
-  # PERCORRENDO A LISTA DE SIMILARIDADES
-  for i in range(len(lista_similaridades)):
-
-    # SE A SIMILARIDADE ENTRE DUAS SENTENÇAS FOR MAIOR QUE A MEDIA, ENTÃO ESTÃO NO MESMO GRUPO
-    if lista_similaridades[i] > media:
-      sub_topico_atual.append(sentencas[i + 1])
-    
-    # SE A SIMILARIDADE ENTRE DUAS SENTENÇAS FOR MENOR QUE A MEDIA, ENTÃO INICIA UM NOVO GRUPO
-    if lista_similaridade[i] < media:
-      sub_topicos.append(sub_topico_atual)
-      sub_topico_atual = [sentencas[i + 1]]
-
-  return sub_topicos
+    return sub_topicos
 
 # |================================================================[ x ]====================================================================|
                                           # FUNÇÃO QUE VAI CRIAR OS RÓTULOS DE CADA SUBTÓPICOS
@@ -222,76 +210,104 @@ A função irá criar rótulos de cada subtópicos com base nas palavras mais fr
 '''
 
 def criar_rotulos(lista_de_subtopicos):
+    # Lista para armazenar os rótulos
+    rotulos = []
 
-  # LISTA PARA ARMAZENAR OS RÓTULOS
-  rotulos = []  
+    # Lista de palavras comuns que serão filtradas
+    palavras_comuns = ["tem", "depende", "também", "para", "que", "é", "um", "uma", "na", "da", "do", "de", "e", "com", "como", "mais", "mas", "se", "ou", "ajuda", "desempenha"]
 
-  for subtopico in lista_de_subtopicos:
+    # Conjunto para armazenar palavras já usadas em rótulos anteriores
+    palavras_ja_usadas = set()
 
-    # LISTA PARA ARMAZENAR SUBSTANTIVOS, VERBOS, NOME PROPRIO E ADJETIVOS
-    palavras_validas = []  
+    for subtopico in lista_de_subtopicos:
+        # Lista para armazenar substantivos, verbos, nomes próprios e adjetivos
+        palavras_validas = []
 
-    # PERCORRE CADA SENTENÇA DO SUBTOPICO
-    for sentenca in subtopico:
-      
-      # PROCESSA A SENTENÇA COM SPACY
-      doc = nlp(sentenca)  
-      for token in doc:
+        # Percorre cada sentença do subtópico
+        for sentenca in subtopico:
 
-        # VERIFICA SE A PALAVRA É SUBSTANTIVO, VERBO, NOME PROPRIO OU ADJETIVO
-        if token.pos_ in ["VERB", "ADJ", "PROPN", "NOUN"]:
-          palavras_validas.append(token.text.lower())  # --> adiciona em minúsculas
+            # Processa a sentença com spaCy
+            doc = nlp(sentenca)
+            for token in doc:
 
-    # CONTA A FREQUENCIA DAS PALAVRAS
-    contagem = FreqDist(palavras_validas)
+                # Verifica se a palavra é substantivo, verbo, nome próprio ou adjetivo
+                if token.pos_ in ["VERB", "ADJ", "PROPN", "NOUN"]:
+                    palavra = token.lemma_.lower()  # Usa a forma lematizada da palavra
+                    if palavra not in palavras_comuns and palavra not in palavras_ja_usadas:
+                        palavras_validas.append(palavra)
 
-    # SELECIONA AS 5 PALAVRAS MAIS COMUNS
-    palavras_frequentes = []
+        # Conta a frequência das palavras
+        contagem = FreqDist(palavras_validas)
 
-    for palavra, quantidade_wolrd in contagem.most_common(5):
-       palavras_frequentes.append(palavra)
+        # Seleciona as 5 palavras mais comuns
+        palavras_frequentes = [palavra for palavra, _ in contagem.most_common(5)]
 
-    # ADICIONA O RÓTULO À LISTA DE PALAVRAS FREQUENTES
-    rotulos.append(palavras_frequentes)
+        # Adiciona as palavras ao conjunto de palavras já usadas
+        palavras_ja_usadas.update(palavras_frequentes)
 
-  return rotulos  # Retorna a lista com os rótulos de cada subtópico
+        # Adiciona o rótulo à lista de rótulos
+        rotulos.append(palavras_frequentes)
+
+    return rotulos  # Retorna a lista com os rótulos de cada subtópico
 
 # |================================================================[ x ]====================================================================|
+                                            # FUNÇÃO QUE VAI JUNTAR AS SENTENÇAS DOS SUBTOPICOS
 
-resultado3 = lista_tokenizada(programacao)
-lista_similaridade = similaridade(resultado3)
+def juntar_subtopicos(sub_topicos):
+    subtopicos_sentencas_unidas = []
+
+    for subtopico in sub_topicos:
+        juntar_sentencas = ' '.join(subtopico)
+        subtopicos_sentencas_unidas.append(juntar_sentencas)
+    
+    return subtopicos_sentencas_unidas
+
+# |================================================================[ x ]====================================================================|
+                                        # FUNÇÃO QUE TIRA AS ASPAS DOS ROTULOS DA LISTA DE ROTULOS
+
+def juntar_rotulos(rotulos):
+    lista_rotulos_juntos = []
+
+    for rotulo in rotulos:
+        rotulo_sem_aspas = ', '.join(rotulo)
+        lista_rotulos_juntos.append(rotulo_sem_aspas)
+    
+    return lista_rotulos_juntos
+
+# |================================================================[ x ]====================================================================|
+                                                # FUNÇÃO QUE VAI CRIAR O ARQUIVO DE SAIDA
+
+def saida_arquivo(diretorio, sub_topicos, lista_rotulos_juntos):
+    with open(diretorio, 'w', encoding='UTF-8') as arquivo:
+
+        # Itera sobre cada subtópico e seu respectivo rótulo
+        for i in range(len(sub_topicos)):
+            
+            # Escreve as sentenças do subtópico
+            for sentenca in sub_topicos[i]:
+                arquivo.write(f"{sentenca}\n")
+            
+            # Escreve o rótulo do subtópico
+            arquivo.write(f"<tópico: {lista_rotulos_juntos[i]}>\n")
+            
+            # Adiciona uma linha em branco para separar os subtópicos
+            arquivo.write("\n")
+        
+# |================================================================[ x ]====================================================================|
+                                                          # APLICANDO AS FUNÇÕES 
+
+texto = leitura_arquivo("/workspaces/Programacao_1/PROJETO_FINAL/projeto-pln/texto_entrada.txt")
+resultado = lista_tokenizada(texto)
+
+
+lista_similaridade = similaridade(resultado)
 media_lista = media_similaridades(lista_similaridade)
 
-subtopicos = criar_subtopicos(programacao, lista_similaridade, media_lista)
-#rotulos = criar_rotulos(subtopicos)
-rotulos_gerados = criar_rotulos(subtopicos)
+lista_subtopicos = criar_subtopicos(texto, lista_similaridade, media_lista)
+rotulos_gerados = criar_rotulos(lista_subtopicos)
+lista_rotulos_juntos = juntar_rotulos(rotulos_gerados)
 
-print("-" * 170)
-print("PROCESSAMENTO: ")
-print(resultado3)
-print(len(resultado3))
-# print(len(teste2))
+saida = saida_arquivo("/workspaces/Programacao_1/PROJETO_FINAL/projeto-pln/texto_saida.txt", lista_subtopicos, lista_rotulos_juntos)
 
-print("-" * 170)
-print("LISTA DAS SIMILARIDADES: ")
-print(lista_similaridade)
-#print(len(lista_similaridade))
-
-print("-" * 170)
-print("MEDIA DAS SIMILARIDADES: ")
-print(media_lista)
-
-print("-" * 170)
-print("SUBTOPICOS: ")
-print(subtopicos)
-
-print("-" * 170)
-print("ROTULOS EM CADA SUBTOPICOS: ")
-
-# Exibir os rótulos de cada subtópico
-for i, rotulo in enumerate(rotulos_gerados):
-    print(f"Subtópico {i+1}: {rotulo}")
-    
-print("-" * 170)
-
+print("ARQUIVO GERADO.")
 # |================================================================[ x ]====================================================================|

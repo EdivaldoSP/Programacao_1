@@ -24,24 +24,13 @@ from collections import Counter
 # nltk.download('averaged_perceptron_tagger_eng')
 
 # |================================================================[ x ]====================================================================|
-                                                  # FAZENDO A LEITURA DO ARQUIVO .TXT
+                                                  # FUNÇÃO QUE FAZ A LEITURA DO ARQUIVO 
 
-# with open ("Colab-2/texto2.txt", "r", encoding="UTF-8") as arquivo:
-#   texto1 = arquivo.read()
-  #print(texto1)
+def leitura_arquivo(diretorio):
+  with open (diretorio, 'r', encoding='UTF-8') as arquivo:
+    texto = arquivo.read()
 
-# with open ("Colab-2/mariele.txt", "r", encoding="UTF-8") as arquivo:
-#   mariele_texto = arquivo.read()
-  #print(texto2)
-
-# abrir arquivo localmente:
-with open ("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/texto_auxiliar.txt") as arquivo:
-   programacao = arquivo.read()
-
-# abrir arquivo codespace:
-# with open ("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/texto_auxiliar.txt") as arquivo:
-#    programacao = arquivo.read()
-  #print(programacao)
+  return texto
 
 # |================================================================[ x ]====================================================================|  
                                             # FUNÇÃO QUE FAZ O PRE-PROCESSAMENTO DO ARQUIVO .TXT
@@ -154,7 +143,7 @@ def similaridade (sentencas_limpas):
     denominador = sqrt(variavel_a) * sqrt(variavel_b)
                  
     # CALCULANDO A FORMULA FINAL
-    cosseno = numerador / denominador
+    cosseno = numerador / denominador if denominador != 0 else 0 # Evita divisão por zero
   #-----------------------------------------------------------------------------------------------------------------------------------------#
 
     # ADICIONANDO O RESULTADO DA SIMILARIDADE A LISTA
@@ -238,14 +227,14 @@ def criar_rotulos(lista_de_subtopicos):
       doc = nlp(sentenca)  
       for token in doc:
 
-        # VERIFICA SE A PALAVRA É SUBSTANTIVO, VERBO, NOME PROPRIO OU ADJETIVO
+        # VERIFICA SE A PALAVRA É SUBSTANTIVO, VERBO, NOME PROPRIO OU ADJETIVO E ADICIONA NA LSITA
         if token.pos_ in ["VERB", "ADJ", "PROPN", "NOUN"]:
           palavras_validas.append(token.text.lower())  # --> adiciona em minúsculas
 
     # CONTA A FREQUENCIA DAS PALAVRAS
     contagem = FreqDist(palavras_validas)
 
-    # SELECIONA AS 5 PALAVRAS MAIS COMUNS
+    # SELECIONANDO AS 5 PALAVRAS MAIS COMUNS
     palavras_frequentes = []
 
     for palavra, quantidade_wolrd in contagem.most_common(5):
@@ -255,43 +244,72 @@ def criar_rotulos(lista_de_subtopicos):
     rotulos.append(palavras_frequentes)
 
   return rotulos  # Retorna a lista com os rótulos de cada subtópico
+# |================================================================[ x ]====================================================================|
+
+# def juntar_subtopicos(lista_subtopicos):
+#     subtopicos_sentencas_unidas = []
+
+#     for subtopico in lista_subtopicos:
+#         juntar_sentencas = ' '.join(subtopico)
+#         subtopicos_sentencas_unidas.append(juntar_sentencas)
+    
+#     return subtopicos_sentencas_unidas
+
+# |================================================================[ x ]====================================================================|
+def juntar_rotulos(rotulos_gerados):
+    lista_rotulos_juntos = []
+
+    for i in rotulos_gerados:
+        teste = ', '.join(i)
+        lista_rotulos_juntos.append(teste)
+    
+    return lista_rotulos_juntos
+    
+# |================================================================[ x ]====================================================================|
+
+# def subtopicos_rotulos(subtopicos_sentencas_unidas, lista_rotulos_juntos):
+#    for i in range(len(subtopicos_sentencas_unidas)):
+#     print(f"{subtopicos_sentencas_unidas[i]}")
+#     print(f"<tópico: {lista_rotulos_juntos[i]}>")
+#     print()
 
 # |================================================================[ x ]====================================================================|
 
-resultado3 = lista_tokenizada(programacao)
-lista_similaridade = similaridade(resultado3)
+def saida_arquivo(diretorio, sub_topicos, lista_rotulos_juntos):
+  with open (diretorio, 'w', encoding='UTF-8') as arquivo:
+    tamanho_sentencas = 1
+
+    for i in range(len(sub_topicos)-1):
+       for j in range(len(sub_topicos[i])-1):
+          tamanho_sentencas += j
+
+    for i in range(len(sub_topicos)):
+        for j in range(tamanho_sentencas):
+            arquivo.write(f"{sub_topicos[i][j]}\n")
+        arquivo.write(f"<tópicos: {lista_rotulos_juntos[i]}>\n")
+
+    # i = 0
+
+    # while i < tamanho:
+    #     arquivo.write(f"{subtopicos_sentencas_unidas[i]}\n")
+    #     arquivo.write(f"<tópicos: {lista_rotulos_juntos[i]}>\n")
+    #     i += 1  
+
+# |================================================================[ x ]====================================================================|
+                                                          # APLICANDO AS FUNÇÕES 
+
+texto = leitura_arquivo("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/texto_entrada.txt")
+resultado = lista_tokenizada(texto)
+
+
+lista_similaridade = similaridade(resultado)
 media_lista = media_similaridades(lista_similaridade)
 
-subtopicos = criar_subtopicos(programacao, lista_similaridade, media_lista)
-#rotulos = criar_rotulos(subtopicos)
-rotulos_gerados = criar_rotulos(subtopicos)
+lista_subtopicos = criar_subtopicos(texto, lista_similaridade, media_lista)
+rotulos_gerados = criar_rotulos(lista_subtopicos)
+lista_rotulos_juntos = juntar_rotulos(rotulos_gerados)
 
-print("-" * 170)
-print("PROCESSAMENTO: ")
-print(resultado3)
-print(len(resultado3))
-# print(len(teste2))
+saida = saida_arquivo("/workspaces/Programacao_1/PROJETO_FINAL/2-Atividades_colab/Colab-2/saida.txt", lista_subtopicos, lista_rotulos_juntos)
 
-print("-" * 170)
-print("LISTA DAS SIMILARIDADES: ")
-print(lista_similaridade)
-#print(len(lista_similaridade))
-
-print("-" * 170)
-print("MEDIA DAS SIMILARIDADES: ")
-print(media_lista)
-
-print("-" * 170)
-print("SUBTOPICOS: ")
-print(subtopicos)
-
-print("-" * 170)
-print("ROTULOS EM CADA SUBTOPICOS: ")
-
-# Exibir os rótulos de cada subtópico
-for i, rotulo in enumerate(rotulos_gerados):
-    print(f"Subtópico {i+1}: {rotulo}")
-    
-print("-" * 170)
-
+print("ARQUIVO GERADO.")
 # |================================================================[ x ]====================================================================|
